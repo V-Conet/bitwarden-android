@@ -4,14 +4,19 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithStayTransitions
+import kotlinx.serialization.Serializable
 
-private const val WELCOME_ROUTE: String = "welcome"
+/**
+ * The type-safe route for the welcome screen.
+ */
+@Serializable
+data object WelcomeRoute
 
 /**
  * Navigate to the welcome screen.
  */
 fun NavController.navigateToWelcome(navOptions: NavOptions? = null) {
-    this.navigate(WELCOME_ROUTE, navOptions)
+    this.navigate(route = WelcomeRoute, navOptions = navOptions)
 }
 
 /**
@@ -22,9 +27,7 @@ fun NavGraphBuilder.welcomeDestination(
     onNavigateToLogin: () -> Unit,
     onNavigateToStartRegistration: () -> Unit,
 ) {
-    composableWithStayTransitions(
-        route = WELCOME_ROUTE,
-    ) {
+    composableWithStayTransitions<WelcomeRoute> {
         WelcomeScreen(
             onNavigateToCreateAccount = onNavigateToCreateAccount,
             onNavigateToLogin = onNavigateToLogin,

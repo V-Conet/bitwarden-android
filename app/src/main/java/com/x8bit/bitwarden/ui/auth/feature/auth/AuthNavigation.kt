@@ -18,7 +18,7 @@ import com.x8bit.bitwarden.ui.auth.feature.enterprisesignon.navigateToEnterprise
 import com.x8bit.bitwarden.ui.auth.feature.environment.environmentDestination
 import com.x8bit.bitwarden.ui.auth.feature.environment.navigateToEnvironment
 import com.x8bit.bitwarden.ui.auth.feature.expiredregistrationlink.expiredRegistrationLinkDestination
-import com.x8bit.bitwarden.ui.auth.feature.landing.LANDING_ROUTE
+import com.x8bit.bitwarden.ui.auth.feature.landing.LandingRoute
 import com.x8bit.bitwarden.ui.auth.feature.landing.landingDestination
 import com.x8bit.bitwarden.ui.auth.feature.landing.navigateToLanding
 import com.x8bit.bitwarden.ui.auth.feature.login.loginDestination
@@ -41,8 +41,15 @@ import com.x8bit.bitwarden.ui.auth.feature.startregistration.startRegistrationDe
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.navigateToTwoFactorLogin
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.twoFactorLoginDestination
 import com.x8bit.bitwarden.ui.auth.feature.welcome.welcomeDestination
+import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToPreAuthSettings
+import com.x8bit.bitwarden.ui.platform.feature.settings.preAuthSettingsDestinations
+import kotlinx.serialization.Serializable
 
-const val AUTH_GRAPH_ROUTE: String = "auth_graph"
+/**
+ * The type-safe route for the auth graph.
+ */
+@Serializable
+data object AuthGraphRoute
 
 /**
  * Add auth destinations to the nav graph.
@@ -51,9 +58,8 @@ const val AUTH_GRAPH_ROUTE: String = "auth_graph"
 fun NavGraphBuilder.authGraph(
     navController: NavHostController,
 ) {
-    navigation(
-        startDestination = LANDING_ROUTE,
-        route = AUTH_GRAPH_ROUTE,
+    navigation<AuthGraphRoute>(
+        startDestination = LandingRoute,
     ) {
         createAccountDestination(
             onNavigateBack = { navController.popBackStack() },
@@ -62,7 +68,7 @@ fun NavGraphBuilder.authGraph(
                     emailAddress = emailAddress,
                     captchaToken = captchaToken,
                     navOptions = navOptions {
-                        popUpTo(LANDING_ROUTE)
+                        popUpTo(route = LandingRoute)
                     },
                 )
             },
@@ -77,7 +83,7 @@ fun NavGraphBuilder.authGraph(
                 )
             },
             onNavigateToCheckEmail = { emailAddress ->
-                navController.navigateToCheckEmail(emailAddress)
+                navController.navigateToCheckEmail(emailAddress = emailAddress)
             },
             onNavigateToEnvironment = { navController.navigateToEnvironment() },
         )
@@ -97,7 +103,7 @@ fun NavGraphBuilder.authGraph(
                     emailAddress = emailAddress,
                     captchaToken = captchaToken,
                     navOptions = navOptions {
-                        popUpTo(LANDING_ROUTE)
+                        popUpTo(route = LandingRoute)
                     },
                 )
             },
@@ -126,6 +132,7 @@ fun NavGraphBuilder.authGraph(
                 navController.navigateToEnvironment()
             },
             onNavigateToStartRegistration = { navController.navigateToStartRegistration() },
+            onNavigateToPreAuthSettings = { navController.navigateToPreAuthSettings() },
         )
         welcomeDestination(
             onNavigateToCreateAccount = { navController.navigateToCreateAccount() },
@@ -197,18 +204,19 @@ fun NavGraphBuilder.authGraph(
             onNavigateToStartRegistration = {
                 navController.navigateToStartRegistration(
                     navOptions = navOptions {
-                        popUpTo(LANDING_ROUTE)
+                        popUpTo(route = LandingRoute)
                     },
                 )
             },
             onNavigateToLogin = {
                 navController.navigateToLanding(
                     navOptions = navOptions {
-                        popUpTo(LANDING_ROUTE)
+                        popUpTo(route = LandingRoute)
                     },
                 )
             },
         )
+        preAuthSettingsDestinations(navController = navController)
     }
 }
 
@@ -219,5 +227,5 @@ fun NavGraphBuilder.authGraph(
 fun NavController.navigateToAuthGraph(
     navOptions: NavOptions? = null,
 ) {
-    navigate(AUTH_GRAPH_ROUTE, navOptions)
+    navigate(route = AuthGraphRoute, navOptions = navOptions)
 }

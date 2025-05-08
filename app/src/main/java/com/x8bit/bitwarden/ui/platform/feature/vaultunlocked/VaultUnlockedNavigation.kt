@@ -29,7 +29,7 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.folders.addedit.navigate
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.foldersDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderAddEditType
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.navigateToFolders
-import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.VAULT_UNLOCKED_NAV_BAR_ROUTE
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.VaultUnlockedNavbarRoute
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.vaultUnlockedNavBarDestination
 import com.x8bit.bitwarden.ui.tools.feature.generator.generatorModalDestination
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorPasswordHistoryMode
@@ -54,14 +54,19 @@ import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.navigateToVaultMo
 import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.vaultMoveToOrganizationDestination
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.navigateToQrCodeScanScreen
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.vaultQrCodeScanDestination
+import kotlinx.serialization.Serializable
 
-const val VAULT_UNLOCKED_GRAPH_ROUTE: String = "vault_unlocked_graph"
+/**
+ * The type-safe route for the vault unlocked graph.
+ */
+@Serializable
+data object VaultUnlockedGraphRoute
 
 /**
  * Navigate to the vault unlocked screen.
  */
 fun NavController.navigateToVaultUnlockedGraph(navOptions: NavOptions? = null) {
-    navigate(VAULT_UNLOCKED_GRAPH_ROUTE, navOptions)
+    navigate(route = VaultUnlockedGraphRoute, navOptions = navOptions)
 }
 
 /**
@@ -71,9 +76,8 @@ fun NavController.navigateToVaultUnlockedGraph(navOptions: NavOptions? = null) {
 fun NavGraphBuilder.vaultUnlockedGraph(
     navController: NavController,
 ) {
-    navigation(
-        startDestination = VAULT_UNLOCKED_NAV_BAR_ROUTE,
-        route = VAULT_UNLOCKED_GRAPH_ROUTE,
+    navigation<VaultUnlockedGraphRoute>(
+        startDestination = VaultUnlockedNavbarRoute,
     ) {
         vaultItemListingDestinationAsRoot(
             onNavigateBack = { navController.popBackStack() },
@@ -116,11 +120,19 @@ fun NavGraphBuilder.vaultUnlockedGraph(
                     parentFolderName = it,
                 )
             },
-            onNavigateToFlightRecorder = { navController.navigateToFlightRecorder() },
-            onNavigateToRecordedLogs = { navController.navigateToRecordedLogs() },
+            onNavigateToFlightRecorder = {
+                navController.navigateToFlightRecorder(isPreAuth = false)
+            },
+            onNavigateToRecordedLogs = { navController.navigateToRecordedLogs(isPreAuth = false) },
         )
-        flightRecorderDestination(onNavigateBack = { navController.popBackStack() })
-        recordedLogsDestination(onNavigateBack = { navController.popBackStack() })
+        flightRecorderDestination(
+            isPreAuth = false,
+            onNavigateBack = { navController.popBackStack() },
+        )
+        recordedLogsDestination(
+            isPreAuth = false,
+            onNavigateBack = { navController.popBackStack() },
+        )
         deleteAccountDestination(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToDeleteAccountConfirmation = {

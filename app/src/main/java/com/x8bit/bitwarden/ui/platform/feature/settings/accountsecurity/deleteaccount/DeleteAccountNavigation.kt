@@ -4,8 +4,13 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import kotlinx.serialization.Serializable
 
-private const val DELETE_ACCOUNT_ROUTE = "delete_account"
+/**
+ * The type-safe route for the delete account screen.
+ */
+@Serializable
+data object DeleteAccountRoute
 
 /**
  * Add delete account destinations to the nav graph.
@@ -14,9 +19,7 @@ fun NavGraphBuilder.deleteAccountDestination(
     onNavigateBack: () -> Unit,
     onNavigateToDeleteAccountConfirmation: () -> Unit,
 ) {
-    composableWithSlideTransitions(
-        route = DELETE_ACCOUNT_ROUTE,
-    ) {
+    composableWithSlideTransitions<DeleteAccountRoute> {
         DeleteAccountScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToDeleteAccountConfirmation = onNavigateToDeleteAccountConfirmation,
@@ -28,5 +31,5 @@ fun NavGraphBuilder.deleteAccountDestination(
  * Navigate to the delete account screen.
  */
 fun NavController.navigateToDeleteAccount(navOptions: NavOptions? = null) {
-    navigate(DELETE_ACCOUNT_ROUTE, navOptions)
+    this.navigate(route = DeleteAccountRoute, navOptions = navOptions)
 }

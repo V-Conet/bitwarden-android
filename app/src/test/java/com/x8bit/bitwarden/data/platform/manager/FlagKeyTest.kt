@@ -18,10 +18,6 @@ class FlagKeyTest {
             "email-verification",
         )
         assertEquals(
-            FlagKey.OnboardingCarousel.keyName,
-            "native-carousel-flow",
-        )
-        assertEquals(
             FlagKey.OnboardingFlow.keyName,
             "native-create-account-flow",
         )
@@ -42,10 +38,6 @@ class FlagKeyTest {
             "cxp-export-mobile",
         )
         assertEquals(
-            FlagKey.AppReviewPrompt.keyName,
-            "app-review-prompt",
-        )
-        assertEquals(
             FlagKey.CipherKeyEncryption.keyName,
             "cipher-key-encryption",
         )
@@ -56,10 +48,6 @@ class FlagKeyTest {
         assertEquals(
             FlagKey.SingleTapPasskeyAuthentication.keyName,
             "single-tap-passkey-authentication",
-        )
-        assertEquals(
-            FlagKey.IgnoreEnvironmentCheck.keyName,
-            "ignore-environment-check",
         )
         assertEquals(
             FlagKey.MutualTls.keyName,
@@ -81,6 +69,14 @@ class FlagKeyTest {
             FlagKey.FlightRecorder.keyName,
             "enable-pm-flight-recorder",
         )
+        assertEquals(
+            FlagKey.RestrictCipherItemDeletion.keyName,
+            "pm-15493-restrict-item-deletion-to-can-manage-permission",
+        )
+        assertEquals(
+            FlagKey.PreAuthSettings.keyName,
+            "enable-pm-prelogin-settings",
+        )
     }
 
     @Test
@@ -89,13 +85,11 @@ class FlagKeyTest {
             listOf(
                 FlagKey.AuthenticatorSync,
                 FlagKey.EmailVerification,
-                FlagKey.OnboardingCarousel,
                 FlagKey.OnboardingFlow,
                 FlagKey.ImportLoginsFlow,
                 FlagKey.VerifiedSsoDomainEndpoint,
                 FlagKey.CredentialExchangeProtocolImport,
                 FlagKey.CredentialExchangeProtocolExport,
-                FlagKey.AppReviewPrompt,
                 FlagKey.SingleTapPasskeyCreation,
                 FlagKey.SingleTapPasskeyAuthentication,
                 FlagKey.AnonAddySelfHostAlias,
@@ -104,6 +98,8 @@ class FlagKeyTest {
                 FlagKey.ChromeAutofill,
                 FlagKey.MobileErrorReporting,
                 FlagKey.FlightRecorder,
+                FlagKey.RestrictCipherItemDeletion,
+                FlagKey.PreAuthSettings,
             ).all {
                 !it.defaultValue
             },
@@ -116,13 +112,11 @@ class FlagKeyTest {
             listOf(
                 FlagKey.AuthenticatorSync,
                 FlagKey.EmailVerification,
-                FlagKey.OnboardingCarousel,
                 FlagKey.OnboardingFlow,
                 FlagKey.ImportLoginsFlow,
                 FlagKey.VerifiedSsoDomainEndpoint,
                 FlagKey.CredentialExchangeProtocolImport,
                 FlagKey.CredentialExchangeProtocolExport,
-                FlagKey.AppReviewPrompt,
                 FlagKey.CipherKeyEncryption,
                 FlagKey.SingleTapPasskeyCreation,
                 FlagKey.SingleTapPasskeyAuthentication,
@@ -138,8 +132,9 @@ class FlagKeyTest {
 
         assertTrue(
             listOf(
-                FlagKey.IgnoreEnvironmentCheck,
                 FlagKey.FlightRecorder,
+                FlagKey.PreAuthSettings,
+                FlagKey.RestrictCipherItemDeletion,
             ).all {
                 !it.isRemotelyConfigured
             },

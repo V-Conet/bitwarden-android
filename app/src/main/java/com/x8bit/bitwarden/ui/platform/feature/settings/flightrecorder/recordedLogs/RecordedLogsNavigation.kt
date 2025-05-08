@@ -3,28 +3,58 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recorded
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import com.x8bit.bitwarden.ui.platform.base.util.composableWithPushTransitions
+import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import kotlinx.serialization.Serializable
 
-private const val FLIGHT_RECORDER_RECORDED_LOGS_ROUTE = "flight_recorder_recorded_logs"
+/**
+ * The type-safe route for the recorded logs screen.
+ */
+@Serializable
+sealed class RecordedLogsRoute {
+    /**
+     * The type-safe route for the recorded logs screen.
+     */
+    @Serializable
+    data object Standard : RecordedLogsRoute()
+
+    /**
+     * The type-safe route for the pre-auth recorded logs screen.
+     */
+    @Serializable
+    data object PreAuth : RecordedLogsRoute()
+}
 
 /**
  * Add recorded logs destination to the nav graph.
  */
 fun NavGraphBuilder.recordedLogsDestination(
+    isPreAuth: Boolean,
     onNavigateBack: () -> Unit,
 ) {
-    composableWithPushTransitions(
-        route = FLIGHT_RECORDER_RECORDED_LOGS_ROUTE,
-    ) {
-        RecordedLogsScreen(
-            onNavigateBack = onNavigateBack,
-        )
+    if (isPreAuth) {
+        composableWithSlideTransitions<RecordedLogsRoute.PreAuth> {
+            RecordedLogsScreen(
+                onNavigateBack = onNavigateBack,
+            )
+        }
+    } else {
+        composableWithSlideTransitions<RecordedLogsRoute.Standard> {
+            RecordedLogsScreen(
+                onNavigateBack = onNavigateBack,
+            )
+        }
     }
 }
 
 /**
  * Navigate to the flight recorder recorded logs screen.
  */
-fun NavController.navigateToRecordedLogs(navOptions: NavOptions? = null) {
-    navigate(FLIGHT_RECORDER_RECORDED_LOGS_ROUTE, navOptions)
+fun NavController.navigateToRecordedLogs(
+    isPreAuth: Boolean,
+    navOptions: NavOptions? = null,
+) {
+    navigate(
+        route = if (isPreAuth) RecordedLogsRoute.PreAuth else RecordedLogsRoute.Standard,
+        navOptions = navOptions,
+    )
 }

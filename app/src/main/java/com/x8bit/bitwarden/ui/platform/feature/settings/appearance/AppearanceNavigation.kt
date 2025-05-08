@@ -4,25 +4,57 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithPushTransitions
+import kotlinx.serialization.Serializable
 
-private const val APPEARANCE_ROUTE = "settings_appearance"
+/**
+ * The type-safe route for the settings appearance screen.
+ */
+@Serializable
+sealed class SettingsAppearanceRoute {
+    /**
+     * The type-safe route for the settings appearance screen.
+     */
+    @Serializable
+    data object Standard : SettingsAppearanceRoute()
+
+    /**
+     * The type-safe route for the pre-auth settings appearance screen.
+     */
+    @Serializable
+    data object PreAuth : SettingsAppearanceRoute()
+}
 
 /**
  * Add settings destinations to the nav graph.
  */
 fun NavGraphBuilder.appearanceDestination(
+    isPreAuth: Boolean,
     onNavigateBack: () -> Unit,
 ) {
-    composableWithPushTransitions(
-        route = APPEARANCE_ROUTE,
-    ) {
-        AppearanceScreen(onNavigateBack = onNavigateBack)
+    if (isPreAuth) {
+        composableWithPushTransitions<SettingsAppearanceRoute.PreAuth> {
+            AppearanceScreen(onNavigateBack = onNavigateBack)
+        }
+    } else {
+        composableWithPushTransitions<SettingsAppearanceRoute.Standard> {
+            AppearanceScreen(onNavigateBack = onNavigateBack)
+        }
     }
 }
 
 /**
  * Navigate to the appearance screen.
  */
-fun NavController.navigateToAppearance(navOptions: NavOptions? = null) {
-    navigate(APPEARANCE_ROUTE, navOptions)
+fun NavController.navigateToAppearance(
+    isPreAuth: Boolean,
+    navOptions: NavOptions? = null,
+) {
+    this.navigate(
+        route = if (isPreAuth) {
+            SettingsAppearanceRoute.PreAuth
+        } else {
+            SettingsAppearanceRoute.Standard
+        },
+        navOptions = navOptions,
+    )
 }

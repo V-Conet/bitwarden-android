@@ -65,10 +65,14 @@ kover {
                     "androidx.compose.ui.tooling.preview.PreviewScreenSizes",
                     // Manually excluded classes/files/etc.
                     "com.bitwarden.core.annotation.OmitFromCoverage",
+                    // Dagger modules
+                    "dagger.Module",
+                )
+                files(
+                    // Navigation helpers
+                    "*.*Navigation.kt",
                 )
                 classes(
-                    // Navigation helpers
-                    "*.*NavigationKt*",
                     // Composable singletons
                     "*.*ComposableSingletons*",
                     // Generated classes related to interfaces with default values

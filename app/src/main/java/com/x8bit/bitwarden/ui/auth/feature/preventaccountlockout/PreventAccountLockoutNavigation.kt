@@ -4,14 +4,19 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import kotlinx.serialization.Serializable
 
-private const val PREVENT_ACCOUNT_LOCKOUT = "prevent_account_lockout"
+/**
+ * The type-safe route for the prevent account lockout screen.
+ */
+@Serializable
+data object PreventAccountLockoutRoute
 
 /**
  * Navigate to prevent account lockout screen.
  */
 fun NavController.navigateToPreventAccountLockout(navOptions: NavOptions? = null) {
-    this.navigate(PREVENT_ACCOUNT_LOCKOUT, navOptions)
+    this.navigate(route = PreventAccountLockoutRoute, navOptions = navOptions)
 }
 
 /**
@@ -20,9 +25,7 @@ fun NavController.navigateToPreventAccountLockout(navOptions: NavOptions? = null
 fun NavGraphBuilder.preventAccountLockoutDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithSlideTransitions(
-        route = PREVENT_ACCOUNT_LOCKOUT,
-    ) {
+    composableWithSlideTransitions<PreventAccountLockoutRoute> {
         PreventAccountLockoutScreen(
             onNavigateBack = onNavigateBack,
         )

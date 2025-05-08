@@ -4,14 +4,19 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import kotlinx.serialization.Serializable
 
-private const val START_REGISTRATION_ROUTE = "start_registration"
+/**
+ * The type-safe route for the start registration screen.
+ */
+@Serializable
+data object StartRegistrationRoute
 
 /**
  * Navigate to the start registration screen.
  */
 fun NavController.navigateToStartRegistration(navOptions: NavOptions? = null) {
-    this.navigate(START_REGISTRATION_ROUTE, navOptions)
+    this.navigate(route = StartRegistrationRoute, navOptions = navOptions)
 }
 
 /**
@@ -26,9 +31,7 @@ fun NavGraphBuilder.startRegistrationDestination(
     onNavigateToCheckEmail: (email: String) -> Unit,
     onNavigateToEnvironment: () -> Unit,
 ) {
-    composableWithSlideTransitions(
-        route = START_REGISTRATION_ROUTE,
-    ) {
+    composableWithSlideTransitions<StartRegistrationRoute> {
         StartRegistrationScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToCompleteRegistration = onNavigateToCompleteRegistration,

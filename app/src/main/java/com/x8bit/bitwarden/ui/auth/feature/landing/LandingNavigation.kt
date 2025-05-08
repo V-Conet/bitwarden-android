@@ -4,14 +4,19 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithStayTransitions
+import kotlinx.serialization.Serializable
 
-const val LANDING_ROUTE: String = "landing"
+/**
+ * The type-safe route for the landing screen.
+ */
+@Serializable
+data object LandingRoute
 
 /**
  * Navigate to the landing screen.
  */
 fun NavController.navigateToLanding(navOptions: NavOptions? = null) {
-    this.navigate(LANDING_ROUTE, navOptions)
+    this.navigate(route = LandingRoute, navOptions = navOptions)
 }
 
 /**
@@ -22,15 +27,15 @@ fun NavGraphBuilder.landingDestination(
     onNavigateToLogin: (emailAddress: String) -> Unit,
     onNavigateToEnvironment: () -> Unit,
     onNavigateToStartRegistration: () -> Unit,
+    onNavigateToPreAuthSettings: () -> Unit,
 ) {
-    composableWithStayTransitions(
-        route = LANDING_ROUTE,
-    ) {
+    composableWithStayTransitions<LandingRoute> {
         LandingScreen(
             onNavigateToCreateAccount = onNavigateToCreateAccount,
             onNavigateToLogin = onNavigateToLogin,
             onNavigateToEnvironment = onNavigateToEnvironment,
             onNavigateToStartRegistration = onNavigateToStartRegistration,
+            onNavigateToPreAuthSettings = onNavigateToPreAuthSettings,
         )
     }
 }

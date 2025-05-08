@@ -5,8 +5,13 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithPushTransitions
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
+import kotlinx.serialization.Serializable
 
-private const val VERIFICATION_CODE_ROUTE: String = "verification_code"
+/**
+ * The type-safe route for the verification code screen.
+ */
+@Serializable
+data object VerificationCodeRoute
 
 /**
  * Add the verification code screen to the nav graph.
@@ -16,9 +21,7 @@ fun NavGraphBuilder.vaultVerificationCodeDestination(
     onNavigateToSearchVault: () -> Unit,
     onNavigateToVaultItemScreen: (args: VaultItemArgs) -> Unit,
 ) {
-    composableWithPushTransitions(
-        route = VERIFICATION_CODE_ROUTE,
-    ) {
+    composableWithPushTransitions<VerificationCodeRoute> {
         VerificationCodeScreen(
             onNavigateToVaultItemScreen = onNavigateToVaultItemScreen,
             onNavigateToSearch = onNavigateToSearchVault,
@@ -33,5 +36,5 @@ fun NavGraphBuilder.vaultVerificationCodeDestination(
 fun NavController.navigateToVerificationCodeScreen(
     navOptions: NavOptions? = null,
 ) {
-    this.navigate(VERIFICATION_CODE_ROUTE, navOptions)
+    this.navigate(route = VerificationCodeRoute, navOptions = navOptions)
 }

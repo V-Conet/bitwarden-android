@@ -4,14 +4,19 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import kotlinx.serialization.Serializable
 
-private const val MASTER_PASSWORD_GENERATOR = "master_password_generator"
+/**
+ * The type-safe route for the master password generator screen.
+ */
+@Serializable
+data object MasterPasswordGeneratorRoute
 
 /**
  * Navigate to master password generator  screen.
  */
 fun NavController.navigateToMasterPasswordGenerator(navOptions: NavOptions? = null) {
-    this.navigate(MASTER_PASSWORD_GENERATOR, navOptions)
+    this.navigate(route = MasterPasswordGeneratorRoute, navOptions = navOptions)
 }
 
 /**
@@ -22,9 +27,7 @@ fun NavGraphBuilder.masterPasswordGeneratorDestination(
     onNavigateToPreventLockout: () -> Unit,
     onNavigateBackWithPassword: () -> Unit,
 ) {
-    composableWithSlideTransitions(
-        route = MASTER_PASSWORD_GENERATOR,
-    ) {
+    composableWithSlideTransitions<MasterPasswordGeneratorRoute> {
         MasterPasswordGeneratorScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToPreventLockout = onNavigateToPreventLockout,

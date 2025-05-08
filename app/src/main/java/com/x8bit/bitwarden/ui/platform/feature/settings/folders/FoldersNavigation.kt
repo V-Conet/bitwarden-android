@@ -4,8 +4,13 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import kotlinx.serialization.Serializable
 
-private const val FOLDERS_ROUTE = "settings_folders"
+/**
+ * The type-safe route for the folders screen.
+ */
+@Serializable
+data object FoldersRoute
 
 /**
  * Add folders destinations to the nav graph.
@@ -15,9 +20,7 @@ fun NavGraphBuilder.foldersDestination(
     onNavigateToAddFolderScreen: () -> Unit,
     onNavigateToEditFolderScreen: (folderId: String) -> Unit,
 ) {
-    composableWithSlideTransitions(
-        route = FOLDERS_ROUTE,
-    ) {
+    composableWithSlideTransitions<FoldersRoute> {
         FoldersScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
@@ -30,5 +33,5 @@ fun NavGraphBuilder.foldersDestination(
  * Navigate to the folders screen.
  */
 fun NavController.navigateToFolders(navOptions: NavOptions? = null) {
-    navigate(FOLDERS_ROUTE, navOptions)
+    this.navigate(route = FoldersRoute, navOptions = navOptions)
 }

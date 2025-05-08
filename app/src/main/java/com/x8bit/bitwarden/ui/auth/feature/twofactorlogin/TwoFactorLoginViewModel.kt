@@ -57,7 +57,7 @@ class TwoFactorLoginViewModel @Inject constructor(
 ) : BaseViewModel<TwoFactorLoginState, TwoFactorLoginEvent, TwoFactorLoginAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
-            val args = TwoFactorLoginArgs(savedStateHandle)
+            val args = savedStateHandle.toTwoFactorLoginArgs()
             TwoFactorLoginState(
                 authMethod = authRepository.twoFactorResponse.preferredAuthMethod,
                 availableAuthMethods = authRepository.twoFactorResponse.availableAuthMethods,
@@ -282,7 +282,7 @@ class TwoFactorLoginViewModel @Inject constructor(
     /**
      * Handle the login result.
      */
-    @Suppress("MaxLineLength")
+    @Suppress("MaxLineLength", "LongMethod")
     private fun handleReceiveLoginResult(action: TwoFactorLoginAction.Internal.ReceiveLoginResult) {
         // Dismiss the loading overlay.
         mutableStateFlow.update { it.copy(dialogState = null) }
@@ -353,6 +353,7 @@ class TwoFactorLoginViewModel @Inject constructor(
 
             // NO-OP: This result should not be possible here
             is LoginResult.ConfirmKeyConnectorDomain -> Unit
+            LoginResult.EncryptionKeyMigrationRequired -> Unit
         }
     }
 
